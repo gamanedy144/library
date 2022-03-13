@@ -117,7 +117,7 @@ body{
     backdrop-filter: blur(var(--blur-value)); 
 }
 .card:hover::after{
-    content: "Edit or Delete book";
+    content: "Delete book";
     position: absolute;
     font-size: calc(var(--content-font-size) * 1.5);
 }

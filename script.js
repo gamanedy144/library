@@ -5,6 +5,7 @@ let addBookButton = document.querySelector("#add-book");
 let dimming = document.querySelector(".dim-background");
 
 let popUpForm = document.querySelector(".pop-up-form");
+let myForm = document.querySelector("#myForm");
 let closeButton = document.querySelector(".close-button");
 let submitButton = document.querySelector(".submit-button");
 
@@ -21,9 +22,9 @@ Book.prototype.info = function() {
 }
 
 window.onload = () =>{
-    console.log("loaded");
+    // console.log("loaded");
     loadFromLocalStorage();
-    console.log(myLibrary);
+    // console.log(myLibrary);
     loadOldLibrary();
 }
 function dimBackground(){
@@ -33,7 +34,6 @@ function dimBackground(){
 function undimBackground(){
     dimming.style.display = "none";
 }
-
 
 function showPopUp(){
     popUpForm.style.display = "grid";
@@ -60,11 +60,12 @@ function addData(){
 }
 
 function resetInputs(){
-    document.getElementById("myForm").reset();
+    myForm.reset();
 }
-
-
-submitButton.addEventListener('click', () => {
+myForm.addEventListener('submit', function(e){
+    e.preventDefault();
+},false);
+function submitBook(){
     let temporary = addData();
     addBookToLibrary(temporary);
     updateLibrary(temporary);
@@ -73,6 +74,9 @@ submitButton.addEventListener('click', () => {
     resetInputs();
 
     saveToLocalStorage();
+}
+submitButton.addEventListener('click', () => {
+    submitBook();
 });
 closeButton.addEventListener('click', () =>{
     removeForm();
@@ -87,7 +91,17 @@ closeButton.addEventListener('click', () =>{
 // });
 
 
-
+document.addEventListener('keydown', function(e) {
+    if(e.key === "Enter"){
+        if(popUpForm.style.display != "none"){
+            submitBook();
+        }
+    }
+    else if(e.key === "Escape"){
+        removeForm();
+        resetInputs();
+    }
+});
 
 
 let got = new Book("Game of Thrones", "George R R Martin", 215, true);
@@ -99,10 +113,25 @@ function addBookToLibrary(book) {
 // addBookToLibrary(got);
 // console.log(myLibrary);
 function makeCardInteract(card){
-    book.addEventListener('click', )
+    card.addEventListener('click', () => {
+        deleteCard(card);
+        saveToLocalStorage();
+    });
 }
-function cardPopUp(card){
-    dimBackground();
+function deleteCard(card){
+    // dimBackground();
+    let tempTitle = card.querySelector(".book-title").innerHTML;
+    let tempObj = myLibrary.find(book => book.title === tempTitle);
+    let index = myLibrary.indexOf(tempObj);
+    // console.log("deleteCard function")
+    // console.log("index " + index)
+    // console.log(booksSection.children[0]);
+    myLibrary.splice(index,1);
+
+    booksSection.removeChild(booksSection.children[index]);
+    console.log(typeof booksSection.children[index]);
+
+
 }
 function loadOldLibrary(){
     for(book of myLibrary){
@@ -113,9 +142,14 @@ function loadOldLibrary(){
         currCard.classList.add("card");
         booksSection.appendChild(currCard);
 
+
+
         for(props in book){
 
             let currPar = document.createElement("p");
+            if(props == "title"){
+                currPar.classList.add("book-title");
+            }
             if(props == "pages"){
                 currPar.textContent = `${book[props]} pages`;
             }
@@ -130,19 +164,23 @@ function loadOldLibrary(){
             currCard.appendChild(currPar);
 
         }
+
+        makeCardInteract(currCard);
     }
 }
 
 function updateLibrary(book){
-    let anchorCard = document.createElement("a");
+
     let currCard = document.createElement("div");
         currCard.classList.add("card");
-        anchorCard.appendChild(currCard);
-        booksSection.appendChild(anchorCard);
+        booksSection.appendChild(currCard);
 
         for(props in book){
 
             let currPar = document.createElement("p");
+            if(props == "title"){
+                currPar.classList.add("book-title");
+            }
             if(props == "pages"){
                 currPar.textContent = `${book[props]} pages`;
             }
@@ -157,13 +195,17 @@ function updateLibrary(book){
             currCard.appendChild(currPar);
 
         }
+        makeCardInteract(currCard);
 }
 
 function saveToLocalStorage() {
     localStorage.clear();
+    if(myLibrary === undefined || myLibrary.length == 0){
+        myLibrary = [];
+    }
     window.localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
-        
-    console.log(localStorage.getItem('myLibrary'));
+    
+    console.log("saveToLocalStorage function "+ localStorage.getItem('myLibrary'));
 }
 
 function clearLocalStorage(){
