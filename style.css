@@ -22,9 +22,26 @@ body{
     display: grid;
     grid-template-rows: auto 1fr;
     grid-template-columns: minmax(650px,1fr) ;
-    /* grid-template-areas: ". header ." ". content ."; */
+    grid-template-areas: "header" "content";
     justify-items: center;
-    gap: 25px;
+    /* gap: 25px; */
+}
+.header-container{
+    background-color: blue;
+    grid-area: header;
+    display: grid;
+    min-width: 100%;
+    grid-template-columns: minmax(650px, 1fr);
+    justify-items: center;
+}
+.content-container{
+    background-color: green;
+    grid-area: content;
+    min-width: 100%;
+
+    display: grid;
+    grid-template-columns: minmax(650px, 1fr);
+    justify-items: center;
 }
 .header{
     background-color: #E2e2e2;
@@ -68,6 +85,8 @@ body{
 }
 
 .card{
+    --blur-value: 4px;
+    background: rgba(255,255,255, 0.3);
     border: 1px solid red;
     width: 350px;
     height: 250px;
@@ -77,12 +96,34 @@ body{
     grid-template-rows: auto auto auto auto;
     gap: 10px;
     place-items: center;
+    cursor: pointer;
+    transition: transform;
+
 }
 
+.card:hover{
+    transform: scale(1.1);
+    /* background-color: rgba(255,255,255, 0.1); */
+    /* backdrop-filter: blur(var(--blur-value)); */
+}
+.card:hover::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255,255,255, 0.5);
+    backdrop-filter: blur(var(--blur-value)); 
+}
+.card:hover::after{
+    content: "Edit or Delete book";
+    position: absolute;
+    font-size: calc(var(--content-font-size) * 1.5);
+}
 .dim-background{
-    background-color: rgba(0,0,0,0.5);
-    filter: blur(50px);
-    -webkit-filter: blur(50px);
+    background-color: rgba(0,0,0,0.3);
+    backdrop-filter: blur(2px);
     width: 100%;
     min-height: 100%;
     /* display:none; */
@@ -138,7 +179,11 @@ form > .close {
 }
 .close .close-button{
     border: none;
-    width: 20px;
-    height: 20px;
+    padding: 5px;
     cursor: pointer;
+    text-align: center;
+}
+
+.dim-card {
+    
 }

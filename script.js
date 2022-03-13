@@ -26,25 +26,34 @@ window.onload = () =>{
     console.log(myLibrary);
     loadOldLibrary();
 }
+function dimBackground(){
+    dimming.style.display = "unset";
+
+}
+function undimBackground(){
+    dimming.style.display = "none";
+}
+
 
 function showPopUp(){
     popUpForm.style.display = "grid";
-    dimming.style.display = "unset";
+    dimBackground();
 }
+
 addBookButton.addEventListener('click', () => {
     showPopUp();
 });
 
 function removeForm(){
     popUpForm.style.display = "none";
-    dimming.style.display = "none";
+    undimBackground();
 }
 
 function addData(){
     let bookTitle = document.getElementById("title").value;
     let bookAuthor = document.getElementById("author").value;
     let bookPages = document.getElementById("pages").value;
-    let bookStatus = document.getElementById("read").value === "on" ? true : false;
+    let bookStatus = document.getElementById("read").checked;
     let tempBook = new Book(bookTitle, bookAuthor, bookPages, bookStatus);
     return tempBook;
 
@@ -89,12 +98,16 @@ function addBookToLibrary(book) {
 
 // addBookToLibrary(got);
 // console.log(myLibrary);
-
-
+function makeCardInteract(card){
+    book.addEventListener('click', )
+}
+function cardPopUp(card){
+    dimBackground();
+}
 function loadOldLibrary(){
     for(book of myLibrary){
 
-        console.log(book);
+        // console.log(book);
 
         let currCard = document.createElement("div");
         currCard.classList.add("card");
@@ -119,10 +132,13 @@ function loadOldLibrary(){
         }
     }
 }
+
 function updateLibrary(book){
+    let anchorCard = document.createElement("a");
     let currCard = document.createElement("div");
         currCard.classList.add("card");
-        booksSection.appendChild(currCard);
+        anchorCard.appendChild(currCard);
+        booksSection.appendChild(anchorCard);
 
         for(props in book){
 
@@ -150,9 +166,14 @@ function saveToLocalStorage() {
     console.log(localStorage.getItem('myLibrary'));
 }
 
+function clearLocalStorage(){
+    localStorage.clear();
+    myLibrary = [];
+}
+
 function loadFromLocalStorage(){
     if (localStorage.getItem("myLibrary") === null) {
-        console.log("empty");
+        // console.log("empty");
         myLibrary = [];
       }
     else {
