@@ -129,7 +129,7 @@ function deleteCard(card){
     myLibrary.splice(index,1);
 
     booksSection.removeChild(booksSection.children[index]);
-    console.log(typeof booksSection.children[index]);
+    // console.log(typeof booksSection.children[index]);
 
 
 }
